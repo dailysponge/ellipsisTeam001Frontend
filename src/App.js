@@ -6,10 +6,12 @@ import Home from './pages/Home';
 import Investment from './pages/Investment';
 import Performance from './pages/Performance';
 import Report from './pages/Report';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
     <div className="App">
+      <NavBar />
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
