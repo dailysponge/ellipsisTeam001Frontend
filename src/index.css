@@ -1,3 +1,25 @@
-.nav-space{
-    margin-right: 100px;
+.nav-space {
+  margin-right: 100px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.home {
+  background-color: rgb(6, 14, 22);
+  color: white;
+}
+
+.recharts-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dash-element {
+  background-color: rgb(25, 39, 52);
+  margin: 10px auto;
+  text-align: center;
+  align-items: center;
 }
