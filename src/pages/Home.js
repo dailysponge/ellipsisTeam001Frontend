@@ -1,3 +1,4 @@
+import { schemeSpectral } from 'd3-scale-chromatic';
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import {
@@ -14,15 +15,6 @@ import {
 } from 'recharts';
 
 const Home = () => {
-  const COLORS = [
-    '#FFEC21',
-    '#378AFF',
-    '#FFA32F',
-    '#F54F52',
-    '#93F03B',
-    '#9552EA'
-  ];
-
   const fakePerformanceData = [
     {
       name: 'Date 1',
@@ -57,22 +49,63 @@ const Home = () => {
   ];
 
   const fakePieData = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 }
+    { name: 'Group A', value: 400, percentage: 0.4 },
+    { name: 'Group B', value: 300, percentage: 0.4 }
   ];
 
   const fakePieData2 = [
-    { name: 'Ticker 1', value: 400 },
-    { name: 'Ticker 2', value: 300 },
-    { name: 'Ticker 3', value: 2313 },
-    { name: 'Ticker 4', value: 2132 },
-    { name: 'Ticker 5', value: 8381 },
-    { name: 'Ticker 6', value: 8321 }
+    { name: 'Ticker 01', value: 400, percentage: 0.4 },
+    { name: 'Ticker 02', value: 400, percentage: 0.4 },
+    { name: 'Ticker 03', value: 400, percentage: 0.4 },
+    { name: 'Ticker 04', value: 400, percentage: 0.4 },
+    { name: 'Ticker 05', value: 400, percentage: 0.4 },
+    { name: 'Ticker 06', value: 400, percentage: 0.4 },
+    { name: 'Ticker 07', value: 400, percentage: 0.4 },
+    { name: 'Ticker 08', value: 400, percentage: 0.4 },
+    { name: 'Ticker 09', value: 400, percentage: 0.4 },
+    { name: 'Ticker 10', value: 400, percentage: 0.4 },
+    { name: 'Ticker 11', value: 400, percentage: 0.4 },
+    { name: 'Ticker 12', value: 400, percentage: 0.4 },
+    { name: 'Ticker 13', value: 400, percentage: 0.4 },
+    { name: 'Ticker 14', value: 400, percentage: 0.4 },
+    { name: 'Ticker 15', value: 400, percentage: 0.4 },
+    { name: 'Ticker 16', value: 400, percentage: 0.4 },
+    { name: 'Ticker 17', value: 400, percentage: 0.4 },
+    { name: 'Ticker 18', value: 400, percentage: 0.4 },
+    { name: 'Ticker 19', value: 400, percentage: 0.4 }
   ];
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="custom-tooltip-ticker-percentage">{`${payload[0].name} : ${payload[0].payload.payload.percentage}%`}</p>
+          <p className="custom-tooltip-ticker-details">${payload[0].value}</p>
+        </div>
+      );
+    }
+  };
+
+  const COLORS1 =
+    schemeSpectral[
+      fakePieData.length >= 11
+        ? 11
+        : fakePieData.length < 3
+        ? 3
+        : fakePieData.length
+    ];
+  const COLORS2 =
+    schemeSpectral[
+      fakePieData2.length >= 11
+        ? 11
+        : fakePieData2.length < 3
+        ? 3
+        : fakePieData2.length
+    ];
 
   return (
     <div className="home">
-      <Container style={{height:'100vh'}}>
+      <Container style={{ height: '100vh' }}>
         <Row>
           <Col>
             <div className="performance-chart dash-element">
@@ -97,10 +130,10 @@ const Home = () => {
                 <h3>Asset Allocation</h3>
                 <PieChart width={500} height={400}>
                   <Pie data={fakePieData} dataKey="value" fill="#8884d8">
-                    {fakePieData.map((entry, index) => (
+                    {fakePieData.map((_entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
+                        fill={COLORS1[index % COLORS1.length]}
                       />
                     ))}
                   </Pie>
@@ -116,16 +149,21 @@ const Home = () => {
             <Row>
               <div className="report dash-element">
                 <h3>Asset Report</h3>
-                <PieChart width={500} height={400} >
-                  <Pie data={fakePieData2} dataKey="value" fill="#8884d8" innerRadius={100}>
+                <PieChart width={500} height={400}>
+                  <Pie
+                    data={fakePieData2}
+                    dataKey="value"
+                    fill="#8884d8"
+                    innerRadius={100}
+                  >
                     {fakePieData2.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
+                        fill={COLORS2[index % COLORS2.length]}
                       />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip content={<CustomTooltip />} />
                 </PieChart>
               </div>
             </Row>
