@@ -5,21 +5,23 @@ import { useState, useEffect } from 'react';
 import DisplayTable from '../components/DisplayTable';
 
 const Report = () => {
-  const [sortedField, setSortedField] = useState(null);
-  const [direction, setDirection] = useState(1);
-  const dummyData3 = [
-    { tickerName: 'yo', name: 'yo', amount: '10', gain: '10', id: 1 },
-    { tickerName: 'LOL', name: 'LOL', amount: '20', gain: '20', id: 2 }
-  ];
-     
-  
-  useEffect(() => {
-    sortingMachine(dummyData3)
-    console.log(dummyData3)
-  }, [direction, sortedField]);
-
- 
-
+  // const [sortedField, setSortedField] = useState(null);
+  // const [direction, setDirection] = useState(1);
+  const [requiredData, setRequiredData] = useState([
+    { tickerName: 'abby', name: 'over', amount: '10', gain: '10', id: 1 },
+    { tickerName: 'tobby', name: 'beef', amount: '100', gain: '100', id: 2 },
+    { tickerName: 'xavier', name: 'ring', amount: '5', gain: '5', id: 3 },
+    { tickerName: 'dog', name: 'destroyed', amount: '35', gain: '35', id: 4 },
+    { tickerName: 'cat', name: 'monster', amount: '333', gain: '333', id: 5 }
+  ]);
+  const [direction2, setDirection2] = useState({
+    id: true,
+    tickerName: true,
+    name: true,
+    amount: true,
+    gain: true
+  });
+console.log(direction2)
   //fetch data
   const [tradingData, setTradingData] = useState({
     tickerName: '',
@@ -28,42 +30,51 @@ const Report = () => {
     gain: ''
   });
 
-  const sortingdirector = (field) => {
-    if (sortedField === field) {
-      setDirection(direction + 1);
-    } else {
-      setDirection(1);
-    }
-    setSortedField(field);
+  // const sortingdirector = (field) => {
+  //   console.log(sortedField);
+  //   if (sortedField === null) {
+  //     console.log('YES');
+  //     setDirection(2);
+  //   } else {
+  //     if (sortedField === field) {
+  //       setDirection(direction + 1);
+  //     } else {
+  //       setDirection(1);
+  //     }
+  //     setSortedField(field);
+  //   }
+  // };
+
+  const sort_by = (field, reverse, primer) => {
+    const key = primer
+      ? function (x) {
+          return primer(x[field]);
+        }
+      : function (x) {
+          return x[field];
+        };
+
+    reverse = !reverse ? 1 : -1;
+
+    return function (a, b) {
+      return (a = key(a)), (b = key(b)), reverse * ((a > b) - (b > a));
+    };
   };
 
-
-
-  const sortingMachine = (data) => {
-    if (sortedField === 'tickerName' || sortedField === 'name') {
-      if (direction % 2 === 1) {
-        return data.sort((a, b) => (a[sortedField] > b[sortedField] ? 1 : -1));
-      } //odd is acsending
-      else {
-        return data.sort((a, b) => (a[sortedField] < b[sortedField] ? 1 : -1));
-      } //even is descending
+  const sortingMachine = (data, theme) => {
+    if (theme === 'tickerName' || theme === 'name') {
+      requiredData.sort(
+        sort_by(theme, direction2.theme, function (a) {
+          return a.toUpperCase();
+        })
+      );
+      setDirection2({ theme: !direction2.theme });
     } else {
-      console.log('sorting number');
-      if (direction % 2 === 1) {
-        data.sort((a, b) => {
-          if (a < b) {
-            return -1;
-          }
-          if (a > b) {
-            return 1;
-          }
-          return 0;
-        });
-      } else {
-        data.reverse();
-      }
+      requiredData.sort(sort_by(theme, direction2.theme, parseInt));
+      setDirection2({ theme: !direction2.theme });
     }
   };
+  // setRequiredData(data);
 
   return (
     <Table striped bordered hover variant="dark">
@@ -73,9 +84,7 @@ const Report = () => {
             <button
               type="button"
               onClick={() => {
-                setSortedField('number');
-                sortingdirector('number');
-                // sortingMachine(dummyData3);
+                sortingMachine(requiredData, 'id');
               }}
             >
               Number
@@ -85,9 +94,7 @@ const Report = () => {
             <button
               type="button"
               onClick={() => {
-                setSortedField('tickerName');
-                sortingdirector('tickerName');
-                // sortingMachine(dummyData3)
+                sortingMachine(requiredData, 'tickerName');
               }}
             >
               Ticker Name
@@ -97,9 +104,7 @@ const Report = () => {
             <button
               type="button"
               onClick={() => {
-                setSortedField('name');
-                sortingdirector('name');
-                // sortingMachine(data)
+                sortingMachine(requiredData, 'name');
               }}
             >
               Name
@@ -109,9 +114,7 @@ const Report = () => {
             <button
               type="button"
               onClick={() => {
-                setSortedField('amount');
-                sortingdirector('amount');
-                // sortingMachine(data)
+                sortingMachine(requiredData, 'amount');
               }}
             >
               Amount ($)
@@ -121,9 +124,7 @@ const Report = () => {
             <button
               type="button"
               onClick={() => {
-                setSortedField('gain');
-                sortingdirector('gain');
-                // sortingMachine(data)
+                sortingMachine(requiredData, 'gain');
               }}
             >
               $Gain
@@ -132,9 +133,10 @@ const Report = () => {
         </tr>
       </thead>
       <tbody>
-        {dummyData3 && dummyData3.map((rowData, index) => (
-           <DisplayTable rowData={rowData} index={index} key={rowData.id}/>
-        ))}
+        {requiredData &&
+          requiredData.map((rowData, index) => (
+            <DisplayTable rowData={rowData} index={index} key={rowData.id} />
+          ))}
       </tbody>
     </Table>
   );
