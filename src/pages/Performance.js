@@ -1,6 +1,10 @@
+
+
 const Performance = () => {
   return (
-    <><div>Performance</div></>
+    <div className="table_container">
+
+    </div>
   );
 }
  

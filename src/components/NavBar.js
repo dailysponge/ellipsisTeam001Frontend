@@ -1,5 +1,5 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
+import Container from 'react-bootstrap/Container';  
 import Navbar from 'react-bootstrap/Navbar';
 
 function NavBar() {
@@ -18,21 +18,23 @@ function NavBar() {
             </div>
           </Navbar.Text>
           <Navbar.Text>
-            <div
-              className="user-icon"
-              style={{
-                background: 'black',
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                display: 'inline-block',
-                textAlign: 'center',
-                lineHeight: '40px',
-                margin: '0px 5px'
-              }}
-            >
-              <div style={{ color: 'white' }}>Yo</div>
-            </div>
+            <a href="/investment">
+              <div
+                className="user-icon"
+                style={{
+                  background: 'black',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  display: 'inline-block',
+                  textAlign: 'center',
+                  lineHeight: '40px',
+                  margin: '0px 5px'
+                }}
+              >
+                <div style={{ color: 'white' }}>Yo</div>
+              </div>
+            </a>
           </Navbar.Text>
         </Navbar.Collapse>
       </Container>
