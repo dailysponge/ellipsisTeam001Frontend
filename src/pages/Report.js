@@ -3,10 +3,11 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import DisplayTable from '../components/DisplayTable';
+import { Container } from 'react-bootstrap';
+import useFetch from '../hooks/useFetch';
+import { apiRoutes } from '../api/apiRoutes';
 
 const Report = () => {
-  // const [sortedField, setSortedField] = useState(null);
-  // const [direction, setDirection] = useState(1);
   const [requiredData, setRequiredData] = useState([
     { tickerName: 'abby', name: 'over', amount: '10', gain: '10', id: 1 },
     { tickerName: 'tobby', name: 'beef', amount: '100', gain: '100', id: 2 },
@@ -21,7 +22,6 @@ const Report = () => {
     amount: true,
     gain: true
   });
-console.log(direction2)
   //fetch data
   const [tradingData, setTradingData] = useState({
     tickerName: '',
@@ -30,20 +30,11 @@ console.log(direction2)
     gain: ''
   });
 
-  // const sortingdirector = (field) => {
-  //   console.log(sortedField);
-  //   if (sortedField === null) {
-  //     console.log('YES');
-  //     setDirection(2);
-  //   } else {
-  //     if (sortedField === field) {
-  //       setDirection(direction + 1);
-  //     } else {
-  //       setDirection(1);
-  //     }
-  //     setSortedField(field);
-  //   }
-  // };
+  const { data, loading, error } = useFetch(apiRoutes.report + '/123456');
+  let tableData = [];
+  if (data && data.data && data.data.userAssetReport) {
+    tableData = data.data.userAssetReport;
+  }
 
   const sort_by = (field, reverse, primer) => {
     const key = primer
@@ -61,84 +52,91 @@ console.log(direction2)
     };
   };
 
-  const sortingMachine = (data, theme) => {
-    if (theme === 'tickerName' || theme === 'name') {
+  const sortingMachine = (e) => {
+    let name = e.target.name;
+    let currentValue = direction2[name];
+    if (name === 'tickerName' || name === 'name') {
       requiredData.sort(
-        sort_by(theme, direction2.theme, function (a) {
+        sort_by(name, currentValue, function (a) {
           return a.toUpperCase();
         })
       );
-      setDirection2({ theme: !direction2.theme });
     } else {
-      requiredData.sort(sort_by(theme, direction2.theme, parseInt));
-      setDirection2({ theme: !direction2.theme });
+      requiredData.sort(sort_by(name, currentValue, parseInt));
+    }
+    setDirection2({
+      id: true,
+      tickerName: true,
+      name: true,
+      amount: true,
+      gain: true
+    });
+    setDirection2((preValue) => {
+      return { ...preValue, [name]: !currentValue };
+    });
+  };
+
+  const arrowFunction = (field, theme) => {
+    if (field === false) {
+      return (
+        <button className="up-arrow" name={theme} onClick={sortingMachine}>
+          ↑
+        </button>
+      );
+    } else {
+      return (
+        <button className="down-arrow" name={theme} onClick={sortingMachine}>
+          ↓
+        </button>
+      );
     }
   };
-  // setRequiredData(data);
 
   return (
-    <Table striped bordered hover variant="dark">
-      <thead>
-        <tr>
-          <th>
-            <button
-              type="button"
-              onClick={() => {
-                sortingMachine(requiredData, 'id');
-              }}
-            >
-              Number
-            </button>
-          </th>
-          <th>
-            <button
-              type="button"
-              onClick={() => {
-                sortingMachine(requiredData, 'tickerName');
-              }}
-            >
-              Ticker Name
-            </button>
-          </th>
-          <th>
-            <button
-              type="button"
-              onClick={() => {
-                sortingMachine(requiredData, 'name');
-              }}
-            >
-              Name
-            </button>
-          </th>
-          <th>
-            <button
-              type="button"
-              onClick={() => {
-                sortingMachine(requiredData, 'amount');
-              }}
-            >
-              Amount ($)
-            </button>
-          </th>
-          <th>
-            <button
-              type="button"
-              onClick={() => {
-                sortingMachine(requiredData, 'gain');
-              }}
-            >
-              $Gain
-            </button>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {requiredData &&
-          requiredData.map((rowData, index) => (
-            <DisplayTable rowData={rowData} index={index} key={rowData.id} />
-          ))}
-      </tbody>
-    </Table>
+    <Container>
+      <Table striped bordered hover variant="dark">
+        <thead>
+          <tr>
+            <th>
+              <div className="box">
+                Number
+                {arrowFunction(direction2.id, 'id')}
+              </div>
+            </th>
+            <th>
+              <div className="box">
+                Ticker Name
+                {arrowFunction(direction2.tickerName, 'tickerName')}
+              </div>
+            </th>
+            <th>
+              <div className="box">
+                Name
+                {arrowFunction(direction2.name, 'name')}
+              </div>
+            </th>
+            <th>
+              <div className="box">
+                Amount ($)
+                {arrowFunction(direction2.amount, 'amount')}
+              </div>
+            </th>
+            <th>
+              <div className="box">
+                $Gain
+                {arrowFunction(direction2.gain, 'gain')}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {tableData &&
+            tableData.map((rowData, index) => (
+              <DisplayTable rowData={rowData} index={index} key={rowData.id} />
+            ))}
+        </tbody>
+      </Table>
+    </Container>
   );
 };
 

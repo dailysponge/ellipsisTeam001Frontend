@@ -1,9 +1,10 @@
 import { Button, Form, Row, Col, InputGroup, Container } from 'react-bootstrap';
 import { useState, useContext } from 'react';
 
+
 const Investment = () => {
   //Fetch current account balance
-  const accountBalance = 100.0
+  const accountBalance = 100.0;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +20,6 @@ const Investment = () => {
   const handleChange = (e) => {
     let value = e.target.value;
     let name = e.target.name;
-    console.log(investmentData)
     setInvestmentData((preValue) => {
       return {
         ...preValue,
@@ -30,23 +30,26 @@ const Investment = () => {
 
   const handleWithdraw = () => {
     //run api to send data
-    console.log(investmentData)
-  }
+  };
 
   const handleDeposit = () => {
     //run api to send data
-    console.log(investmentData)
-  }
+  };
 
   return (
-    <div>
-      Investment
-      Account Balance: ${accountBalance}
+    <div className="invest-container">
+      
       <Form className="investment-form" onSubmit={handleSubmit}>
+      <Form.Label><h1>Investment
+      Account Balance: ${accountBalance}</h1></Form.Label><br />
         <Form.Label>
           <h3>Bank Name:</h3>
         </Form.Label>
-        <Form.Select name='bankName' aria-label="Default select example" onChange={handleChange}>
+        <Form.Select
+          name="bankName"
+          aria-label="Default select example"
+          onChange={handleChange}
+        >
           <option value="DBS">DBS</option>
           <option value="UOB">UOB</option>
           <option value="OCBC">OCBC</option>
@@ -58,7 +61,7 @@ const Investment = () => {
           </Form.Label>
           <Form.Control
             // as="textarea"
-            type='number'
+            type="number"
             rows={1}
             required
             name="bankNo"
@@ -79,9 +82,13 @@ const Investment = () => {
             onChange={handleChange}
           />
         </Form.Group>
-        <div>
-          <Button onClick={handleWithdraw}>Withdraw</Button>
-          <Button onClick={handleDeposit}>Deposit</Button>
+        <div className='invest-btn-box'>
+          <Button className="invest-btn" onClick={handleWithdraw}>
+            Withdraw
+          </Button>
+          <Button className="invest-btn second" onClick={handleDeposit}>
+            Deposit
+          </Button>
         </div>
       </Form>
     </div>

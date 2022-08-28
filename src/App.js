@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import PrivateRoute from './components/PrivateRoute';
 import Assistant from './pages/Assistant';
 import Authenticate from './pages/Authenticate';
 import Error from './pages/Error';
@@ -11,14 +12,16 @@ import Report from './pages/Report';
 function App() {
   return (
     <div className="App">
-      <NavBar />
       <Router>
+        <NavBar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home/performance" element={<Performance />} />
-          <Route path="/home/report" element={<Report />} />
-          <Route path="/investment" element={<Investment />} />
-          <Route path="/authenticate" element={<Authenticate />} />
+          <Route path="/" element={<Authenticate />} />
+          <Route path="/dashboard" element={<PrivateRoute />}>
+            <Route path="/dashboard/home" element={<Home />} />
+            <Route path="/dashboard/performance" element={<Performance />} />
+            <Route path="/dashboard/report" element={<Report />} />
+            <Route path="/dashboard/invest" element={<Investment />} />
+          </Route>
           <Route path="/assistant" element={<Assistant />} />
           <Route path="*" element={<Error />} />
         </Routes>

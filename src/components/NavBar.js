@@ -1,24 +1,27 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';  
+import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
+import { Link } from 'react-router-dom';
 
 function NavBar() {
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="/">Logo</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">
+          Logo
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text className="nav-space">
-            <a href="/">Dash</a>
+            <Link to="/">Dash</Link>
           </Navbar.Text>
           <Navbar.Text>
             <div className="nav-space">
-              <a href="/assistant">FA</a>
+              <Link to="/assistant">FA</Link>
             </div>
           </Navbar.Text>
           <Navbar.Text>
-            <a href="/investment">
+            <Link to="/dashboard/invest">
               <div
                 className="user-icon"
                 style={{
@@ -34,7 +37,7 @@ function NavBar() {
               >
                 <div style={{ color: 'white' }}>Yo</div>
               </div>
-            </a>
+            </Link>
           </Navbar.Text>
         </Navbar.Collapse>
       </Container>
